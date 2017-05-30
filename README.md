@@ -21,4 +21,45 @@ Warning have to be smaller than critical!
                 -A - authorization user_token - you can create it in your profile preference in GLPI site.
                 -T - app-token -  you can create in from your glpi config site, in API section
 
-Based on GPL license.
+# Sample config for Icinga
+
+##### CheckCommand
+
+```
+object CheckCommand "check_lastinventory" {
+  import "plugin-check-command"
+  import "ipv4-or-ipv6"
+  command = [ PluginDir + "/check_glpi_fia_lastinventory.pl" ]
+  arguments = {
+    "-H" = "$host_address$"
+    "-G" = "$glpi_apiurl$"
+    "-A" = "$glpi_usertoken$"
+    "-T" = "$glpi_apptoken$"
+  }
+  vars.host_address = "$check_address$"
+  vars.glpi_apiurl = "https://glpi/apirest.php/"
+  vars.glpi_usertoken = "usertoken"
+  vars.glpi_apptoken = "apptoken"
+}
+```
+
+##### Service definition
+```
+apply Service "Check_LastInvFIA"{
+  import "generic-service"
+  check_command = "check_lastinventory"
+  vars.host = host.address
+  assign where host.vars.fia
+}
+```
+
+### Host definition
+```
+object Host hostname {
+ address = "fqdn"
+ vars.fia = true
+}
+```
+
+## Based on GPL license.
+
