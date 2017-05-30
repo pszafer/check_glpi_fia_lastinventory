@@ -187,11 +187,20 @@ $response = $ua->request($request_search);
 $response->is_success or die($response->status_line);
 my $computer_status = decode_json($response->decoded_content);
 my $totalcount = $computer_status->{totalcount};
-if ($totalcount != 1){
+my $lastinventory; 
+if ($totalcount == 0){
 	print "UNKNOWN - no response for such host";
      	exit $ERRORS{"UNKNOWN"};
+}
+for my $item( @{$computer_status->{data}} ) {
+	if (lc $item->{1} eq lc $hostname){
+		$lastinventory = $item->{5150};
+	}
+}
+if (!(defined($lastinventory))){
+	print "WARNING no date of last inventory";
+     	exit $ERRORS{"WARNING"};
 } 
-my $lastinventory = $computer_status->{data}->[0]->{5150};
 my ($yyyy, $mm, $dd, $hh, $min, $ss) = $lastinventory =~ /(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)/;
 my $timelocal = timelocal($ss, $min, $hh, $dd, $mm, $yyyy);
 		if ($timelocal < $OPTION{critical}) {
