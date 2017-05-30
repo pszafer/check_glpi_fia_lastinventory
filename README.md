@@ -21,6 +21,9 @@ Warning have to be smaller than critical!
                 -A - authorization user_token - you can create it in your profile preference in GLPI site.
                 -T - app-token -  you can create in from your glpi config site, in API section
 
+# Installation
+Simply put check_glpi_fia_lastinventory.pl file in your nrpe/monitoring-plugins plugins DIR.
+
 # Sample config for Icinga
 
 ##### CheckCommand
