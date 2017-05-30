@@ -20,3 +20,5 @@ Warning have to be smaller than critical!
                 -G - glpi api server with https and slash in the end - you can find out your GLPI api server on your glpi config site in API section
                 -A - authorization user_token - you can create it in your profile preference in GLPI site.
                 -T - app-token -  you can create in from your glpi config site, in API section
+
+Based on GPL license.
