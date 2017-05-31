@@ -1,5 +1,6 @@
 # check_glpi_fia_lastinventory
 Check last inventory of FusionInventory Agent via GLPI for Icinga2/Nagios
+It helps integrate Icinga2/Nagios with GLPI / FIA software.
 
 This plugin is intended to use with NRPE - Nagios/Icinga and GLPI/FusionInventory Agent.
 You can check when computer was last time connected to GLPI and set up proper alarm in Icinga/Nagios.
