@@ -202,7 +202,7 @@ if (!(defined($lastinventory))){
      	exit $ERRORS{"WARNING"};
 } 
 my ($yyyy, $mm, $dd, $hh, $min, $ss) = $lastinventory =~ /(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)/;
-my $timelocal = timelocal($ss, $min, $hh, $dd, $mm, $yyyy);
+my $timelocal = timelocal($ss, $min, $hh, $dd, $mm-1, $yyyy);
 		if ($timelocal < $OPTION{critical}) {
 			print "FusionInventory Agent Last Inventory - CRITICAL - $lastinventory of $OPTION{host}\n";
 			exit $ERRORS{"CRITICAL"};
