@@ -22,8 +22,15 @@ use URI;
 use Data::Dumper;
 my $json  = JSON->new->utf8;
 use Time::Local;
-use lib "/usr/lib/monitoring-plugins";
+my $mon_dir = "/usr/lib/monitoring-plugins";
+if (-d $mon_dir){
+	use lib "/usr/lib/monitoring-plugins";
+}
+else {
+	use lib "/usr/lib/nagios/plugins";
+}
 use utils qw(%ERRORS $TIMEOUT);
+
 
 my $name = "check_glpi_fia_lastinventory";
 my $version = "0.0.1";
@@ -203,15 +210,19 @@ if (!(defined($lastinventory))){
 } 
 my ($yyyy, $mm, $dd, $hh, $min, $ss) = $lastinventory =~ /(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)/;
 my $timelocal = timelocal($ss, $min, $hh, $dd, $mm-1, $yyyy);
+my $secondsfromlast = time - $timelocal;
+my $perfwarn = time - $OPTION{warning};
+my $perfcrit = time - $OPTION{critical};
+my $perfdata = "lastseen=$secondsfromlast"."s;$perfwarn;$perfcrit";
 		if ($timelocal < $OPTION{critical}) {
-			print "FusionInventory Agent Last Inventory - CRITICAL - $lastinventory of $OPTION{host}\n";
+			print "FusionInventory Agent Last Inventory - CRITICAL - $lastinventory of $OPTION{host} | $perfdata\n";
 			exit $ERRORS{"CRITICAL"};
 		}
 		elsif ($timelocal < $OPTION{warning}) {
-			print "FusionInventory Agent Last Inventory - WARNING - $lastinventory of $OPTION{host}\n";
+			print "FusionInventory Agent Last Inventory - WARNING - $lastinventory of $OPTION{host} | $perfdata\n";
 			exit $ERRORS{"WARNING"};
 		}
 		else {
-			print "FusionInventory Agent Last Inventory - OK - $lastinventory of $OPTION{host}\n";
+			print "FusionInventory Agent Last Inventory - OK - $lastinventory of $OPTION{host} | $perfdata\n";
 			exit $ERRORS{"OK"};
 		}
