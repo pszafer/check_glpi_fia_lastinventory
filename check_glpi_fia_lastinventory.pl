@@ -149,7 +149,7 @@ $response->is_success or die($response->status_line);
 
 my $json_session = $json->decode($response->decoded_content);
 my $session_token = $json_session->{session_token};
-my $searchComputerURL = $OPTION{apiurl}."/search/Computer";
+my $searchComputerURL = $OPTION{apiurl}."search/Computer";
 #$searchComputerURL = $url."/Computer";
 $app_token->header(
 	"Session-Token" => $session_token	
@@ -168,7 +168,7 @@ my @criteria = (
 		link => "AND",
 		field => 33,
 		searchtype => "contains",
-		value => "^$domain\$", 
+		value => "$domain", 
 	},
 	{
 		link => "AND",
@@ -186,12 +186,14 @@ for my $element (@criteria){
 	}
 	++$index;
 }
-
 my $query_url = "$searchComputerURL?$criteria_query";
 substr($criteria_query, -1)= '';
 my $request_search = HTTP::Request->new('GET', $query_url, $app_token);
 $response = $ua->request($request_search);
-$response->is_success or die($response->status_line);
+if (! $response->is_success) {
+	print "CRITICAL - FIA doesn't exist for this host! ".$response->status_line;
+	exit $ERRORS{"CRITICAL"};
+	}
 my $computer_status = decode_json($response->decoded_content);
 my $totalcount = $computer_status->{totalcount};
 my $lastinventory; 
