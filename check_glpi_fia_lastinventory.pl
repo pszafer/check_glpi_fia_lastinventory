@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 ############################## check_glpi_fia_lastinventory ##############
 # Short description : Check last inventory of FusionInventory Agent via GLPI for Icinga2/Nagios
-# Version : 0.0.1
-# Date :  May 2017
+# Version : 0.0.2
+# Date :  March 2020
 # Author  : Pawel Szafer ( pszafer@gmail.com )
 # Help : http://github.com/pszafer/
 # Licence : GPL
@@ -19,6 +19,7 @@ use LWP::UserAgent;
 use HTTP::Headers;
 use JSON;
 use URI;
+use URI::Split qw(uri_join);
 use Data::Dumper;
 my $json  = JSON->new->utf8;
 use Time::Local;
@@ -33,7 +34,7 @@ use utils qw(%ERRORS $TIMEOUT);
 
 
 my $name = "check_glpi_fia_lastinventory";
-my $version = "0.0.1";
+my $version = "0.0.2";
 
 sub print_version {
 	print "$name version : $version\n";
@@ -137,7 +138,8 @@ sub check_options {
 }
 
 check_options();
-my $initSessionURL = $OPTION{apiurl}."initSession";
+
+my $initSessionURL = $OPTION{apiurl}."/initSession";
 my $app_token = HTTP::Headers->new();
 $app_token->header("Authorization" => "user_token $OPTION{user_token}");
 $app_token->header("App-Token" => $OPTION{app_token});
@@ -149,8 +151,7 @@ $response->is_success or die($response->status_line);
 
 my $json_session = $json->decode($response->decoded_content);
 my $session_token = $json_session->{session_token};
-my $searchComputerURL = $OPTION{apiurl}."search/Computer";
-#$searchComputerURL = $url."/Computer";
+my $searchComputerURL = $OPTION{apiurl}."/search/Computer";
 $app_token->header(
 	"Session-Token" => $session_token	
 );
