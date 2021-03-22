@@ -1,18 +1,20 @@
 # check_glpi_fia_lastinventory
+
 Check last inventory of FusionInventory Agent via GLPI for Icinga2/Nagios
 It helps integrate Icinga2/Nagios with GLPI / FIA software.
 
 This plugin is intended to use with NRPE - Nagios/Icinga and GLPI/FusionInventory Agent.
 You can check when computer was last time connected to GLPI and set up proper alarm in Icinga/Nagios.
-        
+
 Warning and critical can be in S - seconds, H - hours, D- days, W - weeks, M - months
-        
-To set S, etc. set Unit option to S, H, D, W or M.       
+
+To set S, etc. set Unit option to S, H, D, W or M.  
 Default values are:
-           
+
            - Units - M,
            - Critical - 3,
            - Warning - 2
+
 It means that plugin will return Critical if computer was last inventored more than 3 months ago and will return Warning if it was 2 months.
 Warning have to be smaller than critical!
 
@@ -23,7 +25,10 @@ Warning have to be smaller than critical!
                 -T - app-token -  you can create in from your glpi config site, in API section
 
 # Installation
+
 Simply put check_glpi_fia_lastinventory.pl file in your nrpe/monitoring-plugins plugins DIR.
+Newest commit on master: GLPI >= 9.5
+Check older commit for GLPI 9.4 support.
 
 # Sample config for Icinga
 
@@ -48,6 +53,7 @@ object CheckCommand "check_lastinventory" {
 ```
 
 ##### Service definition
+
 ```
 apply Service "Check_LastInvFIA"{
   import "generic-service"
@@ -58,6 +64,7 @@ apply Service "Check_LastInvFIA"{
 ```
 
 ### Host definition
+
 ```
 object Host hostname {
  address = "fqdn"
@@ -66,4 +73,3 @@ object Host hostname {
 ```
 
 ## Based on GPL license.
-

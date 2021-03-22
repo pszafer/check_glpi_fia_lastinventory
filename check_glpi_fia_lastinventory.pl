@@ -166,7 +166,7 @@ my @criteria = (
 	},
 	{
 		link => "AND",
-		field => 33,
+		field => 205,
 		searchtype => "contains",
 		value => "$domain", 
 	},
