@@ -160,15 +160,11 @@ $app_token->header(
 );
 my $hostname = "";
 if ($OPTION{host}=~/(.*?)\.(.*)/){
-	print "concat hostname";
 	$hostname = $1;
 }
 else {
-	print "caly host";
 	$hostname = $OPTION{host};
 }
-
-print "check hostname $hostname";
 
 my @criteria = (
 	{
