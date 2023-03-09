@@ -14,7 +14,6 @@
 use Getopt::Long;
 use strict;
 use warnings;
-
 use LWP::UserAgent;
 use HTTP::Headers;
 use JSON;
@@ -159,19 +158,26 @@ my $searchComputerURL = $OPTION{apiurl}."/search/Computer";
 $app_token->header(
 	"Session-Token" => $session_token	
 );
+my $hostname = "";
+if ($OPTION{host}=~/(.*?)\.(.*)/){
+	$hostname = $1;
+}
+else {
+	$hostname = $OPTION{host};
+}
 
 my @criteria = (
 	{
 		link => "AND",
 		field => 1,  
 		searchtype => "contains",
-		value => $OPTION{host},
+		value => "$hostname",
 	},
 	{
 		link => "AND",
 		field => 80,
 		searchtype => "contains",
-		value => $OPTION{entity}, 
+		value => "$OPTION{entity}", 
 	},
 	{
 		link => "AND",
