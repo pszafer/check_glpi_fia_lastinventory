@@ -160,18 +160,22 @@ $app_token->header(
 );
 my $hostname = "";
 if ($OPTION{host}=~/(.*?)\.(.*)/){
+	print "concat hostname";
 	$hostname = $1;
 }
 else {
+	print "caly host";
 	$hostname = $OPTION{host};
 }
+
+print "check hostname $hostname";
 
 my @criteria = (
 	{
 		link => "AND",
 		field => 1,  
 		searchtype => "contains",
-		value => "$hostname",
+		value => $hostname,
 	},
 	{
 		link => "AND",
@@ -198,6 +202,7 @@ for my $element (@criteria){
 }
 my $query_url = "$searchComputerURL?$criteria_query";
 substr($criteria_query, -1)= '';
+
 my $request_search = HTTP::Request->new('GET', $query_url, $app_token);
 $response = $ua->request($request_search);
 if (! $response->is_success) {
@@ -212,7 +217,7 @@ if ($totalcount == 0){
      	exit $ERRORS{"UNKNOWN"};
 }
 for my $item( @{$computer_status->{data}} ) {
-	if (lc $item->{1} eq lc $OPTION{host}){
+	if (lc $item->{1} eq lc $hostname){
 		$lastinventory = $item->{9};
 	}
 }
