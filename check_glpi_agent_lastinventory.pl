@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 ############################## check_glpi_fia_lastinventory ##############
-# Short description : Check last inventory of FusionInventory Agent via GLPI for Icinga2/Nagios
+# Short description : Check last inventory of GLPI Agent via GLPI for Icinga2/Nagios
 # Version : 0.0.1
 # Date :  March 2023
 # Author  : Pawel Szafer ( pszafer@gmail.com )
@@ -32,7 +32,7 @@ else {
 use utils qw(%ERRORS $TIMEOUT);
 
 
-my $name = "check_glpi_fia_lastinventory";
+my $name = "check_glpi_agent_lastinventory";
 my $version = "0.0.1";
 
 sub print_version {
